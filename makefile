@@ -36,6 +36,7 @@ PLIST_FILE   = $(UPLOAD_PATH)/$(APP).ipa.plist
 IPA_FILE     = $(UPLOAD_PATH)/$(APP).ipa
 BUILD_LOG   ?= OFF
 ICON_NAME   ?= Icon@2x.png
+REMOTE_ADDRESS  ?= localhost
 
 ifdef WORKSPACE
 INFO_FILE    = $(BUILD_PATH)/Products/$(CONFIG)-iphoneos/$(APP).app/Info.plist
@@ -101,7 +102,7 @@ h1{font-weight:lighter;font-size:1.2em;margin:0;padding:0;}a{color:#00f;text-dec
 footer{font-size:.8em;}</style></head><body><div class="container">\
 <h1>$(app_title)</h1>\
 <small>Built on '`date "+%Y-%m-%d %H:%M:%S"`'</small>\
-<p class="icon_container"><img class="icon" src="$(BASE_URL)/icon.png"/></p>\
+<p class="icon_container"><img class="icon" src="$(REMOTE_ADDRESS)$(REMOTE_PATH)/icon.png"/></p>\
 <a class="install_button" href="itms-services://?action=download-manifest&amp;url=$(BASE_URL)/$(APP).ipa.plist">INSTALL</a>\
 <p><a href="$(short_url)">$(short_url)</a></p>\
 <pre class="release_notes">$(GIT_LOG)<br/>    ......</pre>\
@@ -176,7 +177,7 @@ html: plist
 upload:
 	@echo "${INFO_CLR}>> UPLOADING $(APP)...${RESET_CLR}"
 	@rsync --progress -azvhe "ssh -p ${SFTP_PORT}" "$(UPLOAD_PATH)/." "$(SFTP_SERVER):$(SFTP_PATH)"
-	@echo "${RESULT_CLR}** UPLOAD SUCCEEDED **\n** $(BASE_URL) **${RESET_CLR}"
+	@echo "${RESULT_CLR}** UPLOAD SUCCEEDED **\n** $(REMOTE_ADDRESS) **${RESET_CLR}"
 
 send_email:
 	@echo "${INFO_CLR}>> SENDING EMAILS...${RESTORE_CLR}"
